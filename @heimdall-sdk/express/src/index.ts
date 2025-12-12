@@ -53,7 +53,7 @@ export function heimdall(options: LoggerOptions) {
 
 async function sendEntry(baseUrl: string, apiKey: string, entry: LogEntry) {
   try {
-    await fetch(`${baseUrl}/requests`, {
+    await fetch(`${baseUrl}/api/requests`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-API-KEY": apiKey },
       body: JSON.stringify(entry),
