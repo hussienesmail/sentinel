@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/sentinel/Navbar";
 import { Outlet } from "react-router";
 
-export const version = "v0.5.1-alpha";
+export const version = "v0.5.2-alpha";
 
 export function Root() {
   return (
