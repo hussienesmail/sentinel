@@ -67,7 +67,7 @@ app.use(
   heimdall({
     baseUrl: "http://localhost:8080",
     serviceName: "my-company-api",
-    apiKey: "heim_4o8WW5SWg6jWuu0FTnlSnwCqS6a_HfcsZ65Y2iiS2GM", // Replace with your actual API key generated from Sentinel
+    apiKey: "heim_XXXX", // Replace with your actual API key generated from Sentinel
     flushIntervalMs: 10_000, // Optional: default is 10,000 ms
     flushSize: 50, // Optional: default is 50
   })
