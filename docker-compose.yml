@@ -6,7 +6,6 @@ services:
       - "80:80"
     environment:
       - ROOT_USERNAME=admin
-      - ROOT_PASSWORD=adminpassword
-      - CORS_ORIGIN_ALLOWED=https://dominio.com # Optional
+      - ROOT_PASSWORD=admin
     volumes:
       - .docker/sentinel:/db
