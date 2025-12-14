@@ -10,6 +10,7 @@ export interface LoggerOptions {
   flushIntervalMs?: number;
   flushSize?: number;
   maxBufferSize?: number;
+  developerMode?: boolean;
 }
 
 const MAX_BUFFER_SIZE = 5_000;
@@ -24,6 +25,7 @@ export function heimdall(options: LoggerOptions) {
     flushIntervalMs = 10_000,
     flushSize = 50,
     maxBufferSize = MAX_BUFFER_SIZE,
+    developerMode = false,
   } = options;
 
   if (!baseUrl) {
@@ -35,7 +37,8 @@ export function heimdall(options: LoggerOptions) {
     apiKey,
     flushSize,
     flushIntervalMs,
-    maxBufferSize
+    maxBufferSize,
+    developerMode
   );
 
   return (req: Request, res: Response, next: NextFunction) => {
@@ -62,7 +65,8 @@ function createBufferFlusher(
   apiKey: string,
   flushSize: number,
   flushIntervalMs: number,
-  maxBufferSize: number
+  maxBufferSize: number,
+  developerMode: boolean
 ) {
   let buffer: LogEntry[] = [];
   let flushing = false;
@@ -80,7 +84,12 @@ function createBufferFlusher(
     try {
       console.log("[heimdall-sdk] sending", toSend.length, "log entries");
 
-      const res = await fetch(`${baseUrl}/api/requests`, {
+      let url = `${baseUrl}/api/requests`;
+      if (developerMode) {
+        url = `${baseUrl}/requests`;
+      }
+
+      const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-API-KEY": apiKey },
         body: JSON.stringify(toSend),
