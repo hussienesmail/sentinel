@@ -10,6 +10,7 @@ export interface LoggerOptions {
   flushIntervalMs?: number;
   flushSize?: number;
 }
+
 export function heimdall(options: LoggerOptions) {
   const {
     enabled = true,
@@ -51,18 +52,6 @@ export function heimdall(options: LoggerOptions) {
   };
 }
 
-async function sendEntry(baseUrl: string, apiKey: string, entry: LogEntry) {
-  try {
-    await fetch(`${baseUrl}/api/requests`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-API-KEY": apiKey },
-      body: JSON.stringify(entry),
-    });
-  } catch (err) {
-    console.error("[heimdall-sdk] failed to send log:", err);
-  }
-}
-
 function createBufferFlusher(
   baseUrl: string,
   apiKey: string,
@@ -81,8 +70,15 @@ function createBufferFlusher(
     const toSend = [...buffer];
     buffer = [];
 
-    for (const entry of toSend) {
-      await sendEntry(baseUrl, apiKey, entry);
+    try {
+      await fetch(`${baseUrl}/api/requests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-API-KEY": apiKey },
+        body: JSON.stringify(toSend),
+      });
+    } catch (err) {
+      console.error("[heimdall-sdk] failed to send log:", err);
+      buffer.unshift(...toSend);
     }
 
     flushing = false;

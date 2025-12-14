@@ -76,14 +76,16 @@ func (h *RequestLogHandler) HandleCaptureLog(c *gin.Context) {
 		return
 	}
 
-	var req RequestLog
+	var req []RequestLog
 	if err := c.ShouldBindJSON(&req); err != nil {
 		fmt.Println("Error binding JSON:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid request"})
 		return
 	}
 
-	req.ApiKeyConfigID = apiKeyConfigID
+	for i := range req {
+		req[i].ApiKeyConfigID = apiKeyConfigID
+	}
 
 	if err := h.database.Create(&req).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to capture request log"})

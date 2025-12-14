@@ -12,7 +12,7 @@ type RequestLog struct {
 	Method         string              `json:"method"`
 	URL            string              `json:"url"`
 	StatusCode     int                 `json:"statusCode"`
-	Duration       int64               `json:"duration"`
+	Duration       float64             `json:"duration"`
 	IP             string              `json:"ip"`
 	UserAgent      string              `json:"userAgent"`
 	Query          datatypes.JSON      `gorm:"type:json" json:"query"`
