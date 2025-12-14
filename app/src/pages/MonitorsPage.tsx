@@ -1,8 +1,16 @@
-import { CardMonitorConfig } from "@/components/sentinel/CardMonitorConfig";
+import { MointorActions } from "@/components/sentinel/MonitorActions";
+import { MyTable } from "@/components/sentinel/MyTable";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { listMonitorConfigs, type MonitorConfig } from "@/data/monitor-config";
-import { formatTimestamp } from "@/lib/date";
+import { formatIntervalFromSeconds, formatTimestamp } from "@/lib/date";
+import { cn } from "@/lib/utils";
 import { CheckIcon, PlusIcon, SparklesIcon } from "@heroicons/react/24/solid";
+import { MoreVerticalIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -78,45 +86,78 @@ export function MonitorsPage() {
         </div>
       </div>
 
-      {!loading &&
-        monitors.map((monitor) => {
+      <MyTable
+        data={monitors}
+        loading={loading}
+        columns={["Name", "Status", "Url", "Interval", "Last Run", "Actions"]}
+        renderRow={(monitor: MonitorConfig) => {
           return (
-            <CardMonitorConfig
-              key={monitor.id}
-              data={monitor}
-              onActionExecuted={() => {
-                navigate(0);
-              }}
-            />
+            <tr key={monitor.id}>
+              <td>
+                <div className="flex items-center gap-2">
+                  <div
+                    className={cn(
+                      "h-2 w-4 rounded-full",
+                      monitor.healthy ? "bg-green-500" : "bg-red-500"
+                    )}
+                  />
+                  <div className="flex items-center gap-1">
+                    <span
+                      className={cn(
+                        "break-line-table",
+                        !monitor.enabled && "line-through text-muted-foreground"
+                      )}
+                    >
+                      {monitor.name}
+                    </span>
+                    {!monitor.enabled && (
+                      <span className="text-xs text-destructive">Disabled</span>
+                    )}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="flex items-center gap-1 w-fit p-2 rounded-md border">
+                  {monitor.slots.map((slot, index) => (
+                    <div
+                      key={index}
+                      className={cn(
+                        "h-2 w-1 rounded-md",
+                        !slot.is_monitoring_enabled
+                          ? "bg-zinc-300 dark:bg-zinc-600"
+                          : slot.healthy
+                          ? "bg-green-500"
+                          : "bg-red-500"
+                      )}
+                    ></div>
+                  ))}
+                </div>
+              </td>
+              <td className="break-line-table">{monitor.name}</td>
+              <td>{formatIntervalFromSeconds(monitor.interval)}</td>
+              <td>{formatTimestamp(monitor.last_run, true)}</td>
+              <td>
+                <div className="flex items-center gap-2">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button size="sm" variant="ghost">
+                        <MoreVerticalIcon />
+                      </Button>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="w-40!">
+                      <MointorActions
+                        data={monitor}
+                        onActionExecuted={() => fetchMonitors()}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </td>
+            </tr>
           );
-        })}
-
-      {loading && (
-        <div className="w-full h-full flex items-center justify-center gap-2">
-          <div className="flex items-start gap-2">
-            <div className="w-6 h-6 border-4 border-t-4 border-primary/50 border-t-primary rounded-full animate-spin mb-4" />
-            <span>Loading monitors...</span>
-          </div>
-        </div>
-      )}
-
-      {monitors.length === 0 && !loading && (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-          <img
-            src="./assets/empty-box.png"
-            alt="No monitors"
-            className="w-32 h-32 mb-4"
-          />
-          <span className="text-zinc-400 mb-4">
-            No monitors was created yet.
-          </span>
-
-          <Button size="sm" onClick={() => navigate("/monitors/new")}>
-            <PlusIcon className="w-4 h-4" />
-            <span>Create your first monitor</span>
-          </Button>
-        </div>
-      )}
+        }}
+      />
     </>
   );
 }

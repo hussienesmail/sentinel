@@ -7,7 +7,7 @@ export function Root() {
       <main className="w-full h-screen flex">
         <Navbar />
 
-        <section className="flex-1 h-screen flex flex-col w-full p-4 overflow-y-auto">
+        <section className="flex-1 min-h-0 h-screen flex flex-col w-full p-4 overflow-y-auto">
           <Outlet />
         </section>
       </main>

@@ -1,3 +1,4 @@
+import { MyTable } from "@/components/sentinel/MyTable";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -81,46 +82,36 @@ export function EventsPage() {
         </div>
       </div>
 
-      {!loading && events.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Monitor</th>
-              <th>Status Code</th>
-              <th>Response</th>
-              <th>Created At</th>
-            </tr>
-          </thead>
-          <tbody>
-            {events.map((event) => (
-              <tr key={event.id}>
+      <MyTable
+        data={events}
+        columns={["Id", "Monitor", "Status Code", "Response", "Created At"]}
+        loading={loading}
+        renderRow={(event: Attempt) => {
+          return (
+            <tr key={event.id}>
+              <td>
+                <span>{event.id}</span>
+              </td>
+              <td className="break-line-table">{event.monitor_config?.name}</td>
+              <td>{event.status_code}</td>
+              {event.status_code == 0 && event.response == "" ? (
+                <td className="italic">no response</td>
+              ) : (
                 <td>
-                  <span>{event.id}</span>
+                  <button
+                    onClick={() => setResponsePreview(event.response)}
+                    className="px-2 py-1 rounded-sm text-xs flex items-center bg-secondary"
+                  >
+                    <span className="break-line-table">{event.response}</span>
+                    <EyeIcon className="w-4 h-4 inline-block ml-2" />
+                  </button>
                 </td>
-                <td className="break-line-table">
-                  {event.monitor_config?.name}
-                </td>
-                <td>{event.status_code}</td>
-                {event.status_code == 0 && event.response == "" ? (
-                  <td className="italic">no response</td>
-                ) : (
-                  <td>
-                    <button
-                      onClick={() => setResponsePreview(event.response)}
-                      className="px-2 py-1 rounded-sm text-xs flex items-center bg-secondary"
-                    >
-                      <span className="break-line-table">{event.response}</span>
-                      <EyeIcon className="w-4 h-4 inline-block ml-2" />
-                    </button>
-                  </td>
-                )}
-                <td>{formatTimestamp(event.created_at, true)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+              )}
+              <td>{formatTimestamp(event.created_at, true)}</td>
+            </tr>
+          );
+        }}
+      />
 
       <Drawer
         open={responsePreview !== null}
@@ -153,26 +144,6 @@ export function EventsPage() {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-
-      {loading && (
-        <div className="w-full h-full flex items-center justify-center gap-2">
-          <div className="flex items-start gap-2">
-            <div className="w-6 h-6 border-4 border-t-4 border-primary/50 border-t-primary rounded-full animate-spin mb-4" />
-            <span>Loading events...</span>
-          </div>
-        </div>
-      )}
-
-      {events.length === 0 && !loading && (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-          <img
-            src="./assets/empty-box.png"
-            alt="No events"
-            className="w-32 h-32 mb-4"
-          />
-          <span className="mb-4">No events was found</span>
-        </div>
-      )}
     </>
   );
 }

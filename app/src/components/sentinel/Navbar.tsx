@@ -2,19 +2,16 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSensitiveInfo } from "@/hooks/useSensitiveInfo";
 import { useTheme } from "@/hooks/useTheme";
 import { cn } from "@/lib/utils";
+import { KeyIcon, QueueListIcon } from "@heroicons/react/24/solid";
 import {
+  Bell,
   EyeIcon,
-  KeyIcon,
-  MoonIcon,
-  QueueListIcon,
-  SunIcon,
-  WrenchScrewdriverIcon,
-} from "@heroicons/react/24/solid";
-import {
-  EyeClosedIcon,
+  EyeOffIcon,
   ListIcon,
-  LogOutIcon,
+  LucideLogOut,
   MonitorIcon,
+  MoonStarIcon,
+  SunDimIcon,
   UserIcon,
 } from "lucide-react";
 import { NavLink } from "react-router";
@@ -27,77 +24,91 @@ export function Navbar() {
 
   const getNavLinkClass = (isActive: boolean) =>
     cn(
-      "w-full flex items-center cursor-pointer transition-all hover:text-primary px-4 py-1 rounded-sm hover:bg-primary/10",
-      isActive && "font-semibold text-primary-foreground bg-primary"
+      "w-full flex items-center cursor-pointer transition-all px-4 py-1 rounded-xl hover:opacity-80 text-muted-foreground hover:bg-accent hover:text-foreground",
+      isActive && "text-foreground bg-border bg-accent"
     );
 
   return (
-    <nav className="flex flex-col items-center justify-between p-2 h-full w-60 border-r">
-      <section className="w-full flex items-center justify-start gap-2 p-4">
-        <div className="h-4 w-4 rounded-full bg-primary" />
-        <h1 className="text-3xl font-black">Sentinel</h1>
+    <nav className="flex flex-col items-center justify-between p-2 h-full w-70">
+      <section className="w-full flex items-center justify-start gap-2 p-2">
+        <h1 className="text-3xl font-bold flex items-center h-full bg-linear-to-r from-foreground to-foreground/30 bg-clip-text text-transparent">
+          heimdall
+        </h1>
       </section>
 
-      <section className="w-full flex-1 flex flex-col items-center text-sm gap-1 pt-2">
-        <NavLink
-          to="/monitors"
-          className={({ isActive }) => getNavLinkClass(isActive)}
-        >
-          <MonitorIcon className="w-4 h-4 mr-2" />
-          <span>Monitors</span>
-        </NavLink>
-        <NavLink
-          to="/events"
-          className={({ isActive }) => getNavLinkClass(isActive)}
-        >
-          <ListIcon className="w-4 h-4 mr-2" />
-          <span>Events</span>
-        </NavLink>
-        <NavLink
-          to="/integrations"
-          className={({ isActive }) => getNavLinkClass(isActive)}
-        >
-          <WrenchScrewdriverIcon className="w-4 h-4 mr-2" />
-          <span>Alert Settings</span>
-        </NavLink>
-        <NavLink
-          to="/requests"
-          className={({ isActive }) => getNavLinkClass(isActive)}
-        >
-          <QueueListIcon className="w-4 h-4 mr-2" />
-          <span>Requests</span>
-        </NavLink>
-        <NavLink
-          to="/tokens"
-          className={({ isActive }) => getNavLinkClass(isActive)}
-        >
-          <KeyIcon className="w-4 h-4 mr-2" />
-          <span>Tokens</span>
-        </NavLink>
-        <NavLink
-          to="/profile"
-          className={({ isActive }) => getNavLinkClass(isActive)}
-        >
-          <UserIcon className="w-4 h-4 mr-2" />
-          <span>Profile</span>
-        </NavLink>
+      <section className="w-full flex-1 flex flex-col text-sm gap-2 pt-2 px-2">
+        <p className="font-semibold">Observability</p>
+        <div className="w-full flex flex-col gap-1 mb-2 px-1">
+          <NavLink
+            to="/monitors"
+            className={({ isActive }) => getNavLinkClass(isActive)}
+          >
+            <MonitorIcon className="w-4 h-4 mr-2" />
+            <span>Monitors</span>
+          </NavLink>
+          <NavLink
+            to="/events"
+            className={({ isActive }) => getNavLinkClass(isActive)}
+          >
+            <ListIcon className="w-4 h-4 mr-2" />
+            <span>Events</span>
+          </NavLink>
+          <NavLink
+            to="/requests"
+            className={({ isActive }) => getNavLinkClass(isActive)}
+          >
+            <QueueListIcon className="w-4 h-4 mr-2" />
+            <span>Requests</span>
+          </NavLink>
+        </div>
+
+        <p className="font-semibold">Settings</p>
+        <div className="w-full flex flex-col gap-1 px-1">
+          <NavLink
+            to="/integrations"
+            className={({ isActive }) => getNavLinkClass(isActive)}
+          >
+            <Bell className="w-4 h-4 mr-2" />
+            <span>Integrations</span>
+          </NavLink>
+          <NavLink
+            to="/tokens"
+            className={({ isActive }) => getNavLinkClass(isActive)}
+          >
+            <KeyIcon className="w-4 h-4 mr-2" />
+            <span>Tokens</span>
+          </NavLink>
+          <NavLink
+            to="/profile"
+            className={({ isActive }) => getNavLinkClass(isActive)}
+          >
+            <UserIcon className="w-4 h-4 mr-2" />
+            <span>Profile</span>
+          </NavLink>
+        </div>
       </section>
 
       <section className="w-full flex flex-col text-sm gap-1">
-        <div className="w-full flex items-center gap-2 pb-1">
-          <Button size="sm" variant="ghost" onClick={toggleDarkMode}>
-            {isDarkMode ? <SunIcon /> : <MoonIcon />}
+        <div className="w-full flex items-center justify-between">
+          <Button size="sm" variant="ghost" onClick={signOut}>
+            <LucideLogOut />
+            <span>Sign Out</span>
           </Button>
 
-          <Button size="sm" variant="ghost" onClick={toggleSensitiveInfo}>
-            {showSensitiveInfo ? <EyeIcon /> : <EyeClosedIcon />}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              size="icon-sm"
+              variant="outline"
+              onClick={toggleSensitiveInfo}
+            >
+              {showSensitiveInfo ? <EyeIcon /> : <EyeOffIcon />}
+            </Button>
+
+            <Button size="icon-sm" variant="outline" onClick={toggleDarkMode}>
+              {isDarkMode ? <SunDimIcon /> : <MoonStarIcon />}
+            </Button>
+          </div>
         </div>
-
-        <Button size="sm" variant="destructive" onClick={signOut}>
-          <LogOutIcon />
-          <span>Sign Out</span>
-        </Button>
 
         <span className="p-2">{__APP_VERSION__}</span>
       </section>

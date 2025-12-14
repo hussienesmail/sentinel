@@ -39,14 +39,14 @@ export function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen w-full flex">
+    <div className="min-h-screen w-full flex bg-muted">
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full h-115 max-w-xl relative">
-          <div className="absolute -top-8 -z-20 w-full flex items-center justify-center">
+          <div className="absolute -top-8 w-full flex items-center justify-center">
             <div className="w-[80%] border rounded-4xl p-10 bg-background"></div>
           </div>
 
-          <div className="absolute -top-4 -z-20 w-full flex items-center justify-center">
+          <div className="absolute -top-4 w-full flex items-center justify-center">
             <div className="w-[92%] border rounded-4xl p-10 bg-background"></div>
           </div>
 
@@ -55,9 +55,9 @@ export function SignInPage() {
               <div className="flex flex-col ">
                 <h1 className="text-4xl font-bold">Welcome to</h1>
 
-                <span className="text-5xl font-black text-primary">
-                  Sentinel
-                </span>
+                <h1 className="text-3xl font-bold flex items-center h-full bg-linear-to-r from-foreground to-muted bg-clip-text text-transparent">
+                  heimdall
+                </h1>
               </div>
 
               <p className="text-muted-foreground leading-relaxed">
@@ -108,18 +108,16 @@ export function SignInPage() {
               <span className="text-sm text-muted-foreground text-center mt-2">
                 {__APP_VERSION__}
               </span>
+
+              <a
+                href="https://jmcdynamics.com"
+                target="_blank"
+                className="text-xs text-muted-foreground hover:underline text-center mt-2"
+              >
+                Supported by JMCDynamics
+              </a>
             </form>
           </div>
-        </div>
-      </div>
-
-      <div className="hidden lg:flex flex-1 items-center justify-center p-8">
-        <div className="relative">
-          <img
-            src="assets/image.png"
-            alt="Dashboard Preview"
-            className="w-[800px] h-auto rounded-2xl shadow-lg"
-          />
         </div>
       </div>
     </div>

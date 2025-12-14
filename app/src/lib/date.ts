@@ -18,16 +18,16 @@ export const formatTimestamp = (
 
 export const formatIntervalFromSeconds = (seconds: number) => {
   if (seconds < 60) {
-    return `${seconds} seconds`;
+    return `${seconds} s`;
   }
 
   if (seconds < 3600) {
     const mins = Math.floor(seconds / 60);
-    return `${mins} minutes`;
+    return `${mins} m`;
   }
 
   const hours = Math.floor(seconds / 3600);
-  return `${hours} hours`;
+  return `${hours} h`;
 };
 
 export const formatMilliseconds = (milliseconds: number) => {

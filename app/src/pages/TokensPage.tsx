@@ -1,3 +1,4 @@
+import { MyTable } from "@/components/sentinel/MyTable";
 import { Button } from "@/components/ui/button";
 import { listApiKeys, type ApiKeyConfig } from "@/data/api-key-config";
 import { useSensitiveInfo } from "@/hooks/useSensitiveInfo";
@@ -49,47 +50,22 @@ export function TokensPage() {
         </div>
       </div>
 
-      {!loading && (
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th className="w-2xl!">Key</th>
-              <th>Created At</th>
+      <MyTable
+        data={apiKeys}
+        loading={loading}
+        columns={["Name", "Key", "Created At"]}
+        renderRow={(apiKey: ApiKeyConfig) => {
+          return (
+            <tr key={apiKey.id}>
+              <td>{apiKey.name}</td>
+              <td className="break-line-table">
+                {showSensitiveInfo ? apiKey.value : "••••••••••••••••••••••••"}
+              </td>
+              <td>{formatTimestamp(apiKey.created_at, true)}</td>
             </tr>
-          </thead>
-          <tbody>
-            {apiKeys.length === 0 && (
-              <tr>
-                <td colSpan={7} className="text-center py-20">
-                  No api keys found.
-                </td>
-              </tr>
-            )}
-
-            {apiKeys.map((apiKey) => (
-              <tr key={apiKey.id}>
-                <td>{apiKey.name}</td>
-                <td className="break-line-table">
-                  {showSensitiveInfo
-                    ? apiKey.value
-                    : "••••••••••••••••••••••••"}
-                </td>
-                <td>{formatTimestamp(apiKey.created_at, true)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      {loading && (
-        <div className="w-full h-full flex items-center justify-center gap-2">
-          <div className="flex items-start gap-2">
-            <div className="w-6 h-6 border-4 border-t-4 border-primary/50 border-t-primary rounded-full animate-spin mb-4" />
-            <span>Loading integrations...</span>
-          </div>
-        </div>
-      )}
+          );
+        }}
+      />
     </>
   );
 }

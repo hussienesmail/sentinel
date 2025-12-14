@@ -1,4 +1,5 @@
 import type { PaginationData } from "@/data/pagination";
+import { Button } from "../ui/button";
 
 interface PaginationProps {
   data: PaginationData;
@@ -8,54 +9,29 @@ interface PaginationProps {
 export function Pagination({ data, onPageChange }: PaginationProps) {
   const { page: currentPage, total_pages: totalPages } = data;
 
-  const getPages = () => {
-    const pages = new Set<number>();
-
-    pages.add(1);
-
-    if (totalPages > 0) {
-      pages.add(totalPages);
-
-      pages.add(currentPage);
-
-      if (currentPage - 1 > 1) pages.add(currentPage - 1);
-      if (currentPage + 1 < totalPages) pages.add(currentPage + 1);
-    }
-
-    return Array.from(pages).sort((a, b) => a - b);
-  };
-
-  const pagesToShow = getPages();
-
   return (
-    <div className="flex items-center justify-end gap-2 select-none">
-      <button
-        className="px-3 py-1 border rounded disabled:opacity-50"
+    <div className="flex items-center justify-end gap-2 select-none text-sm">
+      <Button
+        size="sm"
+        variant="outline"
         disabled={currentPage <= 1}
         onClick={() => onPageChange(currentPage - 1)}
       >
         Prev
-      </button>
+      </Button>
 
-      {pagesToShow.map((p, i) => (
-        <button
-          key={i}
-          onClick={() => onPageChange(p)}
-          className={`px-3 py-1 border rounded ${
-            p === currentPage ? "bg-secondary font-bold" : ""
-          }`}
-        >
-          {p}
-        </button>
-      ))}
+      <span>
+        Page {currentPage} of {totalPages}
+      </span>
 
-      <button
-        className="px-3 py-1 border rounded disabled:opacity-50"
+      <Button
+        size="sm"
+        variant="outline"
         disabled={currentPage >= totalPages}
         onClick={() => onPageChange(currentPage + 1)}
       >
         Next
-      </button>
+      </Button>
     </div>
   );
 }

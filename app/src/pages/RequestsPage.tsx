@@ -1,4 +1,4 @@
-import { Pagination } from "@/components/sentinel/Pagination";
+import { MyTable } from "@/components/sentinel/MyTable";
 import { Button } from "@/components/ui/button";
 import type { ApiResponse } from "@/data/api-response";
 import { listRequestLogs, type RequestLog } from "@/data/request-log";
@@ -26,7 +26,7 @@ export function RequestsPage() {
 
         const response = await listRequestLogs({
           page: currentPage,
-          per_page: 10,
+          per_page: 20,
         });
 
         setResponse(response);
@@ -72,87 +72,61 @@ export function RequestsPage() {
         </div>
       </div>
 
-      {!loading && (
-        <div className="flex-1 flex flex-col justify-between w-full">
-          <table>
-            <thead>
-              <tr>
-                <th>Service Name</th>
-                <th>Method</th>
-                <th>Host</th>
-                <th>Path</th>
-                <th>Occurred At</th>
-                <th>Latency</th>
-              </tr>
-            </thead>
-            <tbody>
-              {response.data.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="text-center py-20">
-                    No request events found.
-                  </td>
-                </tr>
-              )}
+      <MyTable
+        data={response.data}
+        loading={loading}
+        columns={[
+          "Service Name",
+          "Method",
+          "Host",
+          "Path",
+          "Ocurred At",
+          "Latency",
+        ]}
+        renderRow={(event: RequestLog) => {
+          return (
+            <tr key={event.id}>
+              <td>
+                <span>{event.serviceName}</span>
+              </td>
+              <td>
+                <span>
+                  {event.method}
 
-              {response.data.map((event) => (
-                <tr key={event.id}>
-                  <td>
-                    <span>{event.serviceName}</span>
-                  </td>
-                  <td>
-                    <span>
-                      {event.method}
-
-                      <span
-                        className={cn("font-bold ml-2", {
-                          "text-green-600":
-                            event.statusCode >= 200 && event.statusCode < 300,
-                          "text-yellow-600":
-                            event.statusCode >= 300 && event.statusCode < 400,
-                          "text-red-600": event.statusCode >= 400,
-                        })}
-                      >
-                        {event.statusCode}
-                      </span>
-                    </span>
-                  </td>
-                  <td>
-                    <div className="flex flex-col">
-                      <span>{event.userAgent?.slice(0, 28)}...</span>
-                      <span>{event.ip}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <span>{event.url}</span>
-                  </td>
-                  <td>
-                    <span>{formatTimestamp(event.timestamp)}</span>
-                  </td>
-                  <td>
-                    <span>{formatMilliseconds(event.duration)}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          <div className="py-2">
-            <Pagination
-              data={response.pagination!}
-              onPageChange={setCurrentPage}
-            />
-          </div>
-        </div>
-      )}
-
-      {loading && (
-        <div className="w-full h-full flex items-center justify-center gap-2">
-          <div className="flex items-start gap-2">
-            <div className="w-6 h-6 border-4 border-t-4 border-primary/50 border-t-primary rounded-full animate-spin mb-4" />
-            <span>Loading events...</span>
-          </div>
-        </div>
-      )}
+                  <span
+                    className={cn("font-bold ml-2", {
+                      "text-green-600":
+                        event.statusCode >= 200 && event.statusCode < 300,
+                      "text-yellow-600":
+                        event.statusCode >= 300 && event.statusCode < 400,
+                      "text-red-600": event.statusCode >= 400,
+                    })}
+                  >
+                    {event.statusCode}
+                  </span>
+                </span>
+              </td>
+              <td>
+                <div className="flex flex-col">
+                  <span>{event.userAgent?.slice(0, 28)}...</span>
+                  <span>{event.ip}</span>
+                </div>
+              </td>
+              <td>
+                <span>{event.url}</span>
+              </td>
+              <td>
+                <span>{formatTimestamp(event.timestamp)}</span>
+              </td>
+              <td>
+                <span>{formatMilliseconds(event.duration)}</span>
+              </td>
+            </tr>
+          );
+        }}
+        onPageChange={setCurrentPage}
+        pagination={response.pagination!}
+      />
     </>
   );
 }

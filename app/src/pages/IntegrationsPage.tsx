@@ -1,3 +1,4 @@
+import { MyTable } from "@/components/sentinel/MyTable";
 import { Button } from "@/components/ui/button";
 import {
   listIntegrationConfigs,
@@ -52,77 +53,44 @@ export function IntegrationsPage() {
         </div>
       </div>
 
-      {!loading && integrations.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th className="w-2xl!">Webhook Url</th>
-              <th>Created At</th>
+      <MyTable
+        data={integrations}
+        loading={loading}
+        columns={["Name", "Webhook Url", "Created At"]}
+        renderRow={(integration: IntegrationConfig) => {
+          return (
+            <tr key={integration.id}>
+              <td>
+                <div className="flex items-center gap-1">
+                  {integration.type === "DISCORD" && (
+                    <img
+                      src="/assets/discord.png"
+                      alt="Discord"
+                      className="w-5 h-5"
+                    />
+                  )}
+
+                  {integration.type === "SLACK" && (
+                    <img
+                      src="/assets/slack.png"
+                      alt="Slack"
+                      className="w-5 h-5"
+                    />
+                  )}
+
+                  <span>{integration.name}</span>
+                </div>
+              </td>
+              <td className="break-line-table">
+                {showSensitiveInfo
+                  ? integration.url
+                  : "••••••••••••••••••••••••"}
+              </td>
+              <td>{formatTimestamp(integration.created_at, true)}</td>
             </tr>
-          </thead>
-          <tbody>
-            {integrations.map((integration) => (
-              <tr key={integration.id}>
-                <td>
-                  <div className="flex items-center gap-1">
-                    {integration.type === "DISCORD" && (
-                      <img
-                        src="/assets/discord.png"
-                        alt="Discord"
-                        className="w-5 h-5"
-                      />
-                    )}
-
-                    {integration.type === "SLACK" && (
-                      <img
-                        src="/assets/slack.png"
-                        alt="Slack"
-                        className="w-5 h-5"
-                      />
-                    )}
-
-                    <span>{integration.name}</span>
-                  </div>
-                </td>
-                <td className="break-line-table">
-                  {showSensitiveInfo
-                    ? integration.url
-                    : "••••••••••••••••••••••••"}
-                </td>
-                <td>{formatTimestamp(integration.created_at, true)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-
-      {loading && (
-        <div className="w-full h-full flex items-center justify-center gap-2">
-          <div className="flex items-start gap-2">
-            <div className="w-6 h-6 border-4 border-t-4 border-primary/50 border-t-primary rounded-full animate-spin mb-4" />
-            <span>Loading integrations...</span>
-          </div>
-        </div>
-      )}
-
-      {integrations.length === 0 && !loading && (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-          <img
-            src="./assets/empty-box.png"
-            alt="No integrations"
-            className="w-32 h-32 mb-4"
-          />
-          <span className="text-zinc-400 mb-4">
-            No integrations was created yet.
-          </span>
-
-          <Button size="sm" onClick={() => navigate("/integrations/new")}>
-            <PlusIcon className="w-4 h-4" />
-            <span>Create your first integration</span>
-          </Button>
-        </div>
-      )}
+          );
+        }}
+      />
     </>
   );
 }
