@@ -75,10 +75,10 @@ function createBufferFlusher(
 
     flushing = true;
 
-    const toSend = [...buffer];
-    buffer = [];
+    const toSend = buffer.splice(0, flushSize);
 
     try {
+      console.log("[heimdall-sdk] flushing", toSend.length, "logs");
       await fetch(`${baseUrl}/api/requests`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-API-KEY": apiKey },
