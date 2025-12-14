@@ -110,7 +110,7 @@ app.listen(PORT, () => {
         <section className="w-full flex flex-col items-center gap-10 m-auto">
           <div className="flex flex-col gap-4 text-center">
             <h1 className="text-7xl max-w-4xl mx-auto font-serif text-foreground">
-              Monitoring doesn{""}t need to be complicated
+              Monitoring doesn{"'"}t need to be complicated
             </h1>
 
             <p className="text-sm text-foreground/40 max-w-lg mx-auto">
