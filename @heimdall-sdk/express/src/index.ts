@@ -10,6 +10,7 @@ export interface LoggerOptions {
   flushIntervalMs?: number;
   flushSize?: number;
   maxBufferSize?: number;
+  developerMode?: boolean;
 }
 
 const MAX_BUFFER_SIZE = 5_000;
@@ -24,6 +25,7 @@ export function heimdall(options: LoggerOptions) {
     flushIntervalMs = 10_000,
     flushSize = 50,
     maxBufferSize = MAX_BUFFER_SIZE,
+    developerMode = false,
   } = options;
 
   if (!baseUrl) {
@@ -35,7 +37,8 @@ export function heimdall(options: LoggerOptions) {
     apiKey,
     flushSize,
     flushIntervalMs,
-    maxBufferSize
+    maxBufferSize,
+    developerMode
   );
 
   return (req: Request, res: Response, next: NextFunction) => {
@@ -50,7 +53,7 @@ export function heimdall(options: LoggerOptions) {
 
       const entry = buildLog(req, res, duration, includeBody, serviceName);
 
-      flusher.add(entry);
+      flusher.add(entry, developerMode);
     });
 
     next();
@@ -62,14 +65,15 @@ function createBufferFlusher(
   apiKey: string,
   flushSize: number,
   flushIntervalMs: number,
-  maxBufferSize: number
+  maxBufferSize: number,
+  developerMode = false
 ) {
   let buffer: LogEntry[] = [];
   let flushing = false;
   let failureCount = 0;
   const MAX_FAILURES = 5;
 
-  const flushBuffer = async () => {
+  const flushBuffer = async (developerMode: boolean) => {
     if (flushing) return;
     if (buffer.length === 0) return;
 
@@ -80,7 +84,12 @@ function createBufferFlusher(
     try {
       console.log("[heimdall-sdk] sending", toSend.length, "log entries");
 
-      await fetch(`${baseUrl}/api/requests`, {
+      let url = `${baseUrl}/api/requests`;
+      if (developerMode) {
+        url = `${baseUrl}/requests`;
+      }
+
+      await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-API-KEY": apiKey },
         body: JSON.stringify({
@@ -108,9 +117,12 @@ function createBufferFlusher(
     flushing = false;
   };
 
-  const intervalId = setInterval(() => flushBuffer(), flushIntervalMs);
+  const intervalId = setInterval(
+    () => flushBuffer(developerMode),
+    flushIntervalMs
+  );
 
-  const add = (entry: LogEntry) => {
+  const add = (entry: LogEntry, developerMode: boolean) => {
     if (buffer.length >= maxBufferSize) {
       console.warn("[heimdall-sdk] log buffer full, dropping log entry", entry);
       return;
@@ -118,7 +130,7 @@ function createBufferFlusher(
 
     buffer.push(entry);
     if (buffer.length >= flushSize) {
-      flushBuffer();
+      flushBuffer(developerMode);
     }
   };
 
