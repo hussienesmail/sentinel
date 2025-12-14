@@ -1,3 +1,4 @@
+import Script from "next/script";
 import "./globals.css";
 
 export default function RootLayout({
@@ -12,6 +13,8 @@ export default function RootLayout({
         <title>Heimdall</title>
       </head>
       <body className="antialiased dark">{children}</body>
+
+      <Script src="https://script.supademo.com/supademo.js"></Script>
     </html>
   );
 }
