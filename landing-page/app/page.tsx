@@ -109,7 +109,7 @@ app.listen(PORT, () => {
 
         <section className="w-full flex flex-col items-center gap-10 m-auto">
           <div className="flex flex-col gap-4 text-center">
-            <h1 className="text-7xl max-w-4xl mx-auto font-serif text-foreground">
+            <h1 className="text-7xl max-w-4xl mx-auto font-serif text-foreground max-md:text-5xl">
               Monitoring doesn{"'"}t need to be complicated
             </h1>
 
@@ -119,7 +119,7 @@ app.listen(PORT, () => {
             </p>
           </div>
 
-          <div className="w-full max-w-xl mx-auto flex items-center justify-center gap-2">
+          <div className="w-full max-w-xl mx-auto flex items-center justify-center gap-2 flex-wrap">
             <a
               href="#get-started"
               className="text-foreground cursor-pointer bg-clip-padding bg-linear-to-r from-secondary to-background px-6 py-2 rounded-lg font-bold text-sm border-2 border-border hover:border-primary transition-all hover:to-secondary!"
@@ -129,7 +129,7 @@ app.listen(PORT, () => {
             <a
               href="https://discord.gg/uYVmnZCsR8"
               target="_blank"
-              className="cursor-pointer px-6 py-2 font-bold text-sm text-foreground/40 hover:text-foreground transition-colors"
+              className="cursor-pointer px-6 py-2 border rounded-lg font-bold text-sm text-foreground/40 hover:text-foreground transition-colors"
             >
               <FontAwesomeIcon icon={faDiscord} className="w-4 h-4 mr-2" />
               <span>Discord Community</span>
@@ -151,10 +151,10 @@ app.listen(PORT, () => {
 
       <div
         id="get-started"
-        className="flex-1 min-h-full flex flex-col items-center justify-center pt-10"
+        className="flex-1 flex flex-col items-center justify-center pt-10"
       >
         <div className="w-full flex flex-col max-w-2xl mx-auto text-center text-foreground gap-8">
-          <p className="text-6xl">
+          <p className="text-6xl max-md:text-5xl">
             It{"'"}s simple as running a single Docker command
           </p>
 
@@ -207,7 +207,7 @@ app.listen(PORT, () => {
 
       <div className="flex flex-col items-center justify-center gap-10 pb-10">
         <div className="w-full flex flex-col max-w-xl mx-auto text-center text-foreground gap-8">
-          <p className="text-6xl">Integrate now</p>
+          <p className="text-6xl max-md:text-5xl">Integrate now</p>
 
           <p className="text-foreground/50">
             We also provide integration with popular tools like Express.js, to
