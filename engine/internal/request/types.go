@@ -22,3 +22,19 @@ type RequestLog struct {
 	ApiKeyConfigID uint                `gorm:"not null" json:"api_key_config_id"`
 	ApiKeyConfig   apikey.ApiKeyConfig `gorm:"foreignKey:ApiKeyConfigID" json:"-"`
 }
+
+type RequestLogDTO struct {
+	ServiceName    string         `json:"serviceName"`
+	Timestamp      int64          `json:"timestamp"`
+	Method         string         `json:"method"`
+	URL            string         `json:"url"`
+	StatusCode     int            `json:"statusCode"`
+	Duration       float64        `json:"duration"`
+	IP             string         `json:"ip"`
+	UserAgent      any            `json:"userAgent"`
+	Query          map[string]any `json:"query"`
+	Params         map[string]any `json:"params"`
+	Headers        map[string]any `json:"headers"`
+	Body           any            `json:"body"`
+	ApiKeyConfigID uint           `json:"api_key_config_id"`
+}
