@@ -82,7 +82,9 @@ function createBufferFlusher(
       await fetch(`${baseUrl}/api/requests`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-API-KEY": apiKey },
-        body: JSON.stringify(toSend),
+        body: JSON.stringify({
+          logs: toSend,
+        }),
       });
 
       failureCount = 0;
