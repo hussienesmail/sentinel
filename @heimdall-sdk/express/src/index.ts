@@ -10,7 +10,6 @@ export interface LoggerOptions {
   flushIntervalMs?: number;
   flushSize?: number;
   maxBufferSize?: number;
-  developerMode?: boolean;
 }
 
 const MAX_BUFFER_SIZE = 5_000;
@@ -25,7 +24,6 @@ export function heimdall(options: LoggerOptions) {
     flushIntervalMs = 10_000,
     flushSize = 50,
     maxBufferSize = MAX_BUFFER_SIZE,
-    developerMode = false,
   } = options;
 
   if (!baseUrl) {
@@ -37,8 +35,7 @@ export function heimdall(options: LoggerOptions) {
     apiKey,
     flushSize,
     flushIntervalMs,
-    maxBufferSize,
-    developerMode
+    maxBufferSize
   );
 
   return (req: Request, res: Response, next: NextFunction) => {
@@ -53,7 +50,7 @@ export function heimdall(options: LoggerOptions) {
 
       const entry = buildLog(req, res, duration, includeBody, serviceName);
 
-      flusher.add(entry, developerMode);
+      flusher.add(entry);
     });
 
     next();
@@ -65,64 +62,51 @@ function createBufferFlusher(
   apiKey: string,
   flushSize: number,
   flushIntervalMs: number,
-  maxBufferSize: number,
-  developerMode = false
+  maxBufferSize: number
 ) {
   let buffer: LogEntry[] = [];
   let flushing = false;
   let failureCount = 0;
   const MAX_FAILURES = 5;
 
-  const flushBuffer = async (developerMode: boolean) => {
+  const flushBuffer = async () => {
     if (flushing) return;
     if (buffer.length === 0) return;
 
     flushing = true;
 
-    const toSend = buffer.splice(0, flushSize);
+    const toSend = buffer.slice(0, flushSize);
 
     try {
       console.log("[heimdall-sdk] sending", toSend.length, "log entries");
 
-      let url = `${baseUrl}/api/requests`;
-      if (developerMode) {
-        url = `${baseUrl}/requests`;
-      }
-
-      await fetch(url, {
+      const res = await fetch(`${baseUrl}/api/requests`, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-API-KEY": apiKey },
-        body: JSON.stringify({
-          logs: toSend,
-        }),
+        body: JSON.stringify(toSend),
       });
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
 
+      buffer.splice(0, toSend.length);
       failureCount = 0;
     } catch (err) {
-      console.error("[heimdall-sdk] failed to send log:", err);
       failureCount++;
+      console.error("[heimdall-sdk] failed to send log:", err);
 
-      if (
-        failureCount <= MAX_FAILURES &&
-        buffer.length + toSend.length <= maxBufferSize
-      ) {
-        buffer.unshift(...toSend);
-      } else {
-        console.warn(
-          "[heimdall-sdk] too many failures or buffer full, dropping logs"
-        );
+      if (failureCount > MAX_FAILURES) {
+        console.warn("[heimdall-sdk] too many failures, dropping logs");
+        buffer.splice(0, toSend.length);
       }
+    } finally {
+      flushing = false;
     }
-
-    flushing = false;
   };
 
-  const intervalId = setInterval(
-    () => flushBuffer(developerMode),
-    flushIntervalMs
-  );
+  const intervalId = setInterval(() => flushBuffer(), flushIntervalMs);
 
-  const add = (entry: LogEntry, developerMode: boolean) => {
+  const add = (entry: LogEntry) => {
     if (buffer.length >= maxBufferSize) {
       console.warn("[heimdall-sdk] log buffer full, dropping log entry", entry);
       return;
@@ -130,7 +114,7 @@ function createBufferFlusher(
 
     buffer.push(entry);
     if (buffer.length >= flushSize) {
-      flushBuffer(developerMode);
+      flushBuffer();
     }
   };
 
