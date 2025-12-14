@@ -138,7 +138,13 @@ app.listen(PORT, () => {
           <div className="w-full flex flex-col items-center justify-center gap-4 mt-20">
             <p className="text-sm text-foreground/40">Early Adopters</p>
 
-            <FidexaLogo />
+            <a
+              href="https://fidexa.com.br"
+              target="_blank"
+              className="cursor-pointer"
+            >
+              <FidexaLogo />
+            </a>
           </div>
         </section>
       </div>
