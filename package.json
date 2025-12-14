@@ -1,5 +1,6 @@
 {
   "dependencies": {
     "@heimdall-sdk/express": "^0.2.3"
-  }
+  },
+  "version": "0.0.1"
 }
