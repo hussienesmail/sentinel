@@ -9,7 +9,10 @@ export interface LoggerOptions {
   apiKey: string;
   flushIntervalMs?: number;
   flushSize?: number;
+  maxBufferSize?: number;
 }
+
+const MAX_BUFFER_SIZE = 5_000;
 
 export function heimdall(options: LoggerOptions) {
   const {
@@ -20,6 +23,7 @@ export function heimdall(options: LoggerOptions) {
     serviceName,
     flushIntervalMs = 10_000,
     flushSize = 50,
+    maxBufferSize = MAX_BUFFER_SIZE,
   } = options;
 
   if (!baseUrl) {
@@ -30,7 +34,8 @@ export function heimdall(options: LoggerOptions) {
     baseUrl,
     apiKey,
     flushSize,
-    flushIntervalMs
+    flushIntervalMs,
+    maxBufferSize
   );
 
   return (req: Request, res: Response, next: NextFunction) => {
@@ -56,10 +61,13 @@ function createBufferFlusher(
   baseUrl: string,
   apiKey: string,
   flushSize: number,
-  flushIntervalMs: number
+  flushIntervalMs: number,
+  maxBufferSize: number
 ) {
   let buffer: LogEntry[] = [];
   let flushing = false;
+  let failureCount = 0;
+  const MAX_FAILURES = 5;
 
   const flushBuffer = async () => {
     if (flushing) return;
@@ -76,22 +84,44 @@ function createBufferFlusher(
         headers: { "Content-Type": "application/json", "X-API-KEY": apiKey },
         body: JSON.stringify(toSend),
       });
+
+      failureCount = 0;
     } catch (err) {
       console.error("[heimdall-sdk] failed to send log:", err);
-      buffer.unshift(...toSend);
+      failureCount++;
+
+      if (
+        failureCount <= MAX_FAILURES &&
+        buffer.length + toSend.length <= maxBufferSize
+      ) {
+        buffer.unshift(...toSend);
+      } else {
+        console.warn(
+          "[heimdall-sdk] too many failures or buffer full, dropping logs"
+        );
+      }
     }
 
     flushing = false;
   };
 
-  setInterval(() => flushBuffer(), flushIntervalMs);
+  const intervalId = setInterval(() => flushBuffer(), flushIntervalMs);
 
   const add = (entry: LogEntry) => {
+    if (buffer.length >= maxBufferSize) {
+      console.warn("[heimdall-sdk] log buffer full, dropping log entry", entry);
+      return;
+    }
+
     buffer.push(entry);
     if (buffer.length >= flushSize) {
       flushBuffer();
     }
   };
 
-  return { add };
+  const cleanup = () => {
+    clearInterval(intervalId);
+  };
+
+  return { add, cleanup };
 }
