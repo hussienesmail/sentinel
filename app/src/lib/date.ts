@@ -18,7 +18,7 @@ export const formatTimestamp = (
 
 export const formatIntervalFromSeconds = (seconds: number) => {
   if (seconds < 60) {
-    return `${seconds} s`;
+    return `${seconds.toFixed(2)} s`;
   }
 
   if (seconds < 3600) {

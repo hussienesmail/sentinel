@@ -12,6 +12,7 @@ import {
   type GroupedRequest,
   type RequestMetrics,
 } from "@/data/metrics";
+import { formatIntervalFromSeconds } from "@/lib/date";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
@@ -49,9 +50,7 @@ export function MetricsPage() {
       } catch {
         toast.error("Failed to fetch metrics");
       } finally {
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
+        setLoading(false);
       }
     };
 
@@ -174,6 +173,7 @@ export function MetricsPage() {
             "URL",
             "Total Requests",
             "Failed Requests (>= 500)",
+            "Avg. Latency (ms)",
           ]}
           data={metrics.grouped_requests}
           loading={loading}
@@ -194,6 +194,11 @@ export function MetricsPage() {
                 </td>
                 <td>
                   <span>{formatQuantityOfRequests(groupedRequest.failed)}</span>
+                </td>
+                <td>
+                  <span>
+                    {formatIntervalFromSeconds(groupedRequest.average_duration)}
+                  </span>
                 </td>
               </tr>
             );

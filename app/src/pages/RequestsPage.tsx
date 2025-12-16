@@ -1,10 +1,8 @@
 import { MyTable } from "@/components/sentinel/MyTable";
-import { Button } from "@/components/ui/button";
 import type { ApiResponse } from "@/data/api-response";
 import { listRequestLogs, type RequestLog } from "@/data/request-log";
 import { formatMilliseconds, formatTimestamp } from "@/lib/date";
 import { cn } from "@/lib/utils";
-import { SparklesIcon } from "@heroicons/react/24/solid";
 import { useCallback, useEffect, useState } from "react";
 
 export function RequestsPage() {
@@ -17,37 +15,24 @@ export function RequestsPage() {
     data: [],
   });
 
-  const fetchEvents = useCallback(
-    async (manual = false) => {
-      try {
-        if (!manual) {
-          setLoading(true);
-        }
+  const fetchEvents = useCallback(async () => {
+    try {
+      setLoading(true);
 
-        const response = await listRequestLogs({
-          page: currentPage,
-          per_page: 20,
-        });
+      const response = await listRequestLogs({
+        page: currentPage,
+        per_page: 20,
+      });
 
-        setResponse(response);
-        setNow(new Date());
-      } finally {
-        if (!manual) {
-          setLoading(false);
-        }
-      }
-    },
-    [currentPage]
-  );
+      setResponse(response);
+      setNow(new Date());
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     fetchEvents();
-
-    const interval = setInterval(() => {
-      fetchEvents(true);
-    }, 3000);
-
-    return () => clearInterval(interval);
   }, [fetchEvents]);
 
   return (
@@ -62,13 +47,6 @@ export function RequestsPage() {
               {formatTimestamp(now.getTime())}
             </span>
           </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button size="sm" variant="outline" className="cursor-default!">
-            <SparklesIcon className="w-4 h-4 text-primary" />
-            <span>Refresh every 3 seconds</span>
-          </Button>
         </div>
       </div>
 
@@ -107,12 +85,9 @@ export function RequestsPage() {
                 </span>
               </td>
               <td>
-                <div className="flex flex-col">
-                  <span>{event.userAgent?.slice(0, 28)}...</span>
-                  <span>{event.ip}</span>
-                </div>
+                <span>{event.ip}</span>
               </td>
-              <td>
+              <td className="break-line-table">
                 <span>{event.url}</span>
               </td>
               <td>
